@@ -1,0 +1,20 @@
+{
+  "name": "backend-technical-assessment",
+  "version": "1.0.0",
+  "description": "This technical assessment is designed to evaluate your backend engineering skills using Node.js and TypeScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VerifiedInc/backend-technical-assessment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VerifiedInc/backend-technical-assessment/issues"
+  },
+  "homepage": "https://github.com/VerifiedInc/backend-technical-assessment#readme"
+}
