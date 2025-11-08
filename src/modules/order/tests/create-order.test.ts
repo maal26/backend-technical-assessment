@@ -30,16 +30,21 @@ describe("POST /orders", () => {
             },
         ];
 
-        const response = await request(app).post("/orders").set("Authorization", sessionToken as string).send({ items });
+        const response = await request(app)
+            .post("/orders")
+            .set("Authorization", sessionToken as string)
+            .send({ items });
 
         assert.strictEqual(response.status, STATUS_CODES.CREATED);
 
-        const [order] = await db.select().from(schema.orders)
+        const [order] = await db
+            .select()
+            .from(schema.orders)
+            .where(eq(schema.orders.customerId, userId as number));
 
         assert.strictEqual(order.customerId, userId);
         assert.strictEqual(order.totalAmount, 8600);
         assert.strictEqual(order.status, schema.OrderStatus.Pending);
-
 
         for (const item of items) {
             const [orderItem] = await db.select().from(schema.orderItems).where(eq(schema.orderItems.name, item.name));
@@ -54,40 +59,61 @@ describe("POST /orders", () => {
     it("should should require items", async () => {
         const [sessionToken] = await createSessionToken();
 
-        const response = await request(app).post("/orders").set("Authorization", sessionToken as string).send({ items: [] });
+        const response = await request(app)
+            .post("/orders")
+            .set("Authorization", sessionToken as string)
+            .send({ items: [] });
 
         assert.strictEqual(response.status, STATUS_CODES.UNPROCESSABLE_ENTITY);
 
-        assert.strictEqual(response.body.properties.items.errors[0], 'Too small: expected array to have >=1 items');
+        assert.strictEqual(response.body.properties.items.errors[0], "Too small: expected array to have >=1 items");
     });
 
     it("should should require items.*.name", async () => {
         const [sessionToken] = await createSessionToken();
 
-        const response = await request(app).post("/orders").set("Authorization", sessionToken as string).send({ items: [{}] });
+        const response = await request(app)
+            .post("/orders")
+            .set("Authorization", sessionToken as string)
+            .send({ items: [{}] });
 
         assert.strictEqual(response.status, STATUS_CODES.UNPROCESSABLE_ENTITY);
 
-        assert.strictEqual(response.body.properties.items.items[0].properties.name.errors[0], 'Invalid input: expected string, received undefined');
+        assert.strictEqual(
+            response.body.properties.items.items[0].properties.name.errors[0],
+            "Invalid input: expected string, received undefined"
+        );
     });
 
     it("should should require items.*.price", async () => {
         const [sessionToken] = await createSessionToken();
 
-        const response = await request(app).post("/orders").set("Authorization", sessionToken as string).send({ items: [{}] });
+        const response = await request(app)
+            .post("/orders")
+            .set("Authorization", sessionToken as string)
+            .send({ items: [{}] });
 
         assert.strictEqual(response.status, STATUS_CODES.UNPROCESSABLE_ENTITY);
 
-        assert.strictEqual(response.body.properties.items.items[0].properties.price.errors[0], 'Invalid input: expected number, received undefined');
+        assert.strictEqual(
+            response.body.properties.items.items[0].properties.price.errors[0],
+            "Invalid input: expected number, received undefined"
+        );
     });
 
     it("should should require items.*.quantity", async () => {
         const [sessionToken] = await createSessionToken();
 
-        const response = await request(app).post("/orders").set("Authorization", sessionToken as string).send({ items: [{}] });
+        const response = await request(app)
+            .post("/orders")
+            .set("Authorization", sessionToken as string)
+            .send({ items: [{}] });
 
         assert.strictEqual(response.status, STATUS_CODES.UNPROCESSABLE_ENTITY);
 
-        assert.strictEqual(response.body.properties.items.items[0].properties.quantity.errors[0], 'Invalid input: expected number, received undefined');
+        assert.strictEqual(
+            response.body.properties.items.items[0].properties.quantity.errors[0],
+            "Invalid input: expected number, received undefined"
+        );
     });
 });
