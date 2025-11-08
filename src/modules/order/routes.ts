@@ -31,7 +31,7 @@ orderRoutes.get("/", verifyToken, async (request: Request, response: Response) =
         return response.status(success.code).json(success.data);
     } catch (error) {
         logger().error("Get Orders", {
-            message: (error as Error).message
+            message: (error as Error).message,
         });
 
         return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
@@ -56,7 +56,7 @@ orderRoutes.get("/:id", verifyToken, async (request: Request, response: Response
         return response.status(success.code).json(success.data);
     } catch (error) {
         logger().error("Get Order By Id", {
-            message: (error as Error).message
+            message: (error as Error).message,
         });
 
         return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
@@ -85,7 +85,7 @@ orderRoutes.post("/", verifyToken, async (request: Request, response: Response) 
         return response.status(success.code).json(success.data);
     } catch (error) {
         logger().error("Create Order", {
-            message: (error as Error).message
+            message: (error as Error).message,
         });
 
         return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
@@ -120,7 +120,7 @@ orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response
         return response.status(success.code).json(success.data);
     } catch (error) {
         logger().error("Update Order Status", {
-            message: (error as Error).message
+            message: (error as Error).message,
         });
 
         return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
@@ -145,7 +145,7 @@ orderRoutes.delete("/:id", verifyToken, async (request: Request, response: Respo
         return response.status(success.code).json(success.data);
     } catch (error) {
         logger().error("Cancel Order", {
-            message: (error as Error).message
+            message: (error as Error).message,
         });
 
         return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({

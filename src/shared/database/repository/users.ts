@@ -6,7 +6,15 @@ import { envs } from "@/shared/config/envs.ts";
 
 export const userRepository = () => {
     const getUserByEmail = async (email: User["email"]) => {
-        const [user] = await db.select().from(users).where(eq(users.email, email));
+        const [user] = await db
+            .select({
+                id: users.id,
+                name: users.name,
+                email: users.email,
+                password: users.password,
+            })
+            .from(users)
+            .where(eq(users.email, email));
 
         return user;
     };

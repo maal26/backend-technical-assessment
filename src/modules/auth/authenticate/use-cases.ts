@@ -27,7 +27,7 @@ export async function authenticate({ email, password }: AuthenticateUserInput) {
     await removeAllUserSessions(user.id);
     const token = await createSession(user.id);
 
-    return successResponse({ ...user, password: undefined, token }, STATUS_CODES.OK);
+    return successResponse({ ...user, id: undefined, password: undefined, token }, STATUS_CODES.OK);
 }
 
 export async function register({ name, email, password }: RegisterUserInput) {
