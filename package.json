@@ -2,10 +2,10 @@
     "name": "backend-technical-assessment",
     "version": "1.0.0",
     "description": "This technical assessment is designed to evaluate your backend engineering skills using Node.js and TypeScript.",
-    "main": "src/main.ts",
+    "main": "src/shared/main.ts",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch src/main.ts",
+        "dev": "tsx watch src/shared/main.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
