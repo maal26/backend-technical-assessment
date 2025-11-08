@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { db } from "../index.ts";
 import { sessions, type Session } from "../schemas/sessions.ts";
-import { and, eq, sql, gt } from "drizzle-orm";
+import { and, eq, gt } from "drizzle-orm";
 
 export const sessionRepository = () => {
     const createSession = async (userId: number) => {

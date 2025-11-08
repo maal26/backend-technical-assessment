@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/shared/main.ts",
-        "test": "NODE_ENV=test tsx src/shared/helpers/dropDatabase.ts && npx drizzle-kit push --force && tsx --test --test-reporter=spec"
+        "test": "NODE_ENV=test tsx src/shared/helpers/dropDatabase.ts && npx drizzle-kit push --force && NODE_ENV=test tsx --test --test-reporter=spec"
     },
     "repository": {
         "type": "git",

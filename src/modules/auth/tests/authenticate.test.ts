@@ -7,8 +7,6 @@ import { db } from "@/shared/database/index.ts";
 import { users } from "@/shared/database/schemas/users.ts";
 import { eq } from "drizzle-orm";
 import { sessions } from "@/shared/database/schemas/sessions.ts";
-import bcrypt from "bcryptjs";
-import { envs } from "@/shared/config/envs.ts";
 
 describe("POST /register", () => {
     it("should be possible to register a new user", async () => {
