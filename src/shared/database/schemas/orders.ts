@@ -52,3 +52,10 @@ export type OrderItem = InferSelectModel<typeof orderItems>;
 export const orderRelations = relations(orders, ({ many }) => ({
     items: many(orderItems),
 }));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+    order: one(orders, {
+        fields: [orderItems.orderId],
+        references: [orders.id],
+    }),
+}));

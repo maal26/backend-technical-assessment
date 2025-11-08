@@ -1,9 +1,9 @@
 import { Router } from "express";
-import type { Request, Response, NextFunction } from "express";
-import { authenticateUserRequestSchema, registerUserRequestSchema } from "./schemas.ts";
+import type { Request, Response } from "express";
 import { STATUS_CODES } from "@/shared/infra/http/status-code.ts";
-import { authenticate, register } from "./use-cases.ts";
 import { z } from "zod";
+import { authenticateUserRequestSchema, registerUserRequestSchema } from "./authenticate/schemas.ts";
+import { authenticate, register } from "./authenticate/use-cases.ts";
 
 const authRoutes = Router();
 

@@ -1,8 +1,8 @@
 import express from "express";
 import { envs } from "./shared/config/envs.ts";
 
-import authRoutes from "./modules/auth/authenticate/routes.ts";
-import orderRoutes from "./modules/order/create-orders/routes.ts";
+import orderRoutes from "./modules/order/routes.ts";
+import authRoutes from "./modules/auth/routes.ts";
 
 const app = express();
 
