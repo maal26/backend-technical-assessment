@@ -11,96 +11,147 @@ import { getOrder } from "./get-order/use-cases.ts";
 import { deleteOrder } from "./delete-order/use-cases.ts";
 import { updateOrderStatusSchema } from "./update-order/schemas.ts";
 import { updateOrderStatus } from "./update-order/use-cases.ts";
+import { logger } from "@/shared/config/logger.ts";
 
 const orderRoutes = Router();
 
 orderRoutes.get("/", verifyToken, async (request: Request, response: Response) => {
-    const parsed = getOrdersRequestSchema.safeParse(request.query);
+    try {
+        const parsed = getOrdersRequestSchema.safeParse(request.query);
 
-    if (!parsed.success) {
-        return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
-            message: "Validation Errors",
-            ...z.treeifyError(parsed.error),
+        if (!parsed.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsed.error),
+            });
+        }
+
+        const [, success] = await getOrders({ status: parsed.data.status, userId: request.userId as number });
+
+        return response.status(success.code).json(success.data);
+    } catch (error) {
+        logger().error("Get Orders", {
+            message: (error as Error).message
+        });
+
+        return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            message: "An unexpected error occurred. Please try again.",
         });
     }
-
-    const [, success] = await getOrders({ status: parsed.data.status, userId: request.userId as number });
-
-    return response.status(success.code).json(success.data);
 });
 
 orderRoutes.get("/:id", verifyToken, async (request: Request, response: Response) => {
-    const [error, success] = await getOrder({
-        userId: request.userId as number,
-        orderId: parseInt(request.params.id),
-    });
+    try {
+        const [error, success] = await getOrder({
+            userId: request.userId as number,
+            orderId: parseInt(request.params.id),
+        });
 
-    if (error) {
-        return response.status(error.code).json({
-            message: error.message,
+        if (error) {
+            return response.status(error.code).json({
+                message: error.message,
+            });
+        }
+
+        return response.status(success.code).json(success.data);
+    } catch (error) {
+        logger().error("Get Order By Id", {
+            message: (error as Error).message
+        });
+
+        return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            message: "An unexpected error occurred. Please try again.",
         });
     }
-
-    return response.status(success.code).json(success.data);
 });
 
 orderRoutes.post("/", verifyToken, async (request: Request, response: Response) => {
-    const parsed = createOrderRequestSchema.safeParse(request.body);
+    try {
+        const parsed = createOrderRequestSchema.safeParse(request.body);
 
-    if (!parsed.success) {
-        return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
-            message: "Validation Errors",
-            ...z.treeifyError(parsed.error),
+        if (!parsed.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsed.error),
+            });
+        }
+
+        const [error, success] = await createOrder({ items: parsed.data.items, userId: request.userId as number });
+
+        if (error) {
+            return response.status(error.code).json({ message: error.message });
+        }
+
+        return response.status(success.code).json(success.data);
+    } catch (error) {
+        logger().error("Create Order", {
+            message: (error as Error).message
+        });
+
+        return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            message: "An unexpected error occurred. Please try again.",
         });
     }
-
-    const [error, success] = await createOrder({ items: parsed.data.items, userId: request.userId as number });
-
-    if (error) {
-        return response.status(error.code).json({ message: error.message });
-    }
-
-    return response.status(success.code).json(success.data);
 });
 
 orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response) => {
-    const parsed = updateOrderStatusSchema.safeParse(request.body);
+    try {
+        const parsed = updateOrderStatusSchema.safeParse(request.body);
 
-    if (!parsed.success) {
-        return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
-            message: "Validation Errors",
-            ...z.treeifyError(parsed.error),
+        if (!parsed.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsed.error),
+            });
+        }
+
+        const [error, success] = await updateOrderStatus({
+            userId: request.userId as number,
+            orderId: parseInt(request.params.id),
+            status: parsed.data.status,
+        });
+
+        if (error) {
+            return response.status(error.code).json({
+                message: error.message,
+            });
+        }
+
+        return response.status(success.code).json(success.data);
+    } catch (error) {
+        logger().error("Update Order Status", {
+            message: (error as Error).message
+        });
+
+        return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            message: "An unexpected error occurred. Please try again.",
         });
     }
-
-    const [error, success] = await updateOrderStatus({
-        userId: request.userId as number,
-        orderId: parseInt(request.params.id),
-        status: parsed.data.status,
-    });
-
-    if (error) {
-        return response.status(error.code).json({
-            message: error.message,
-        });
-    }
-
-    return response.status(success.code).json(success.data);
 });
 
 orderRoutes.delete("/:id", verifyToken, async (request: Request, response: Response) => {
-    const [error, success] = await deleteOrder({
-        userId: request.userId as number,
-        orderId: parseInt(request.params.id),
-    });
+    try {
+        const [error, success] = await deleteOrder({
+            userId: request.userId as number,
+            orderId: parseInt(request.params.id),
+        });
 
-    if (error) {
-        return response.status(error.code).json({
-            message: error.message,
+        if (error) {
+            return response.status(error.code).json({
+                message: error.message,
+            });
+        }
+
+        return response.status(success.code).json(success.data);
+    } catch (error) {
+        logger().error("Cancel Order", {
+            message: (error as Error).message
+        });
+
+        return response.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            message: "An unexpected error occurred. Please try again.",
         });
     }
-
-    return response.status(success.code).json(success.data);
 });
 
 export default orderRoutes;

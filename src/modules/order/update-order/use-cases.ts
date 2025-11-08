@@ -1,3 +1,4 @@
+import { logger } from "@/shared/config/logger.ts";
 import { orderRepository } from "@/shared/database/repository/orders.ts";
 import { OrderStatus, type Order } from "@/shared/database/schemas/orders.ts";
 import type { User } from "@/shared/database/schemas/users.ts";
@@ -29,10 +30,19 @@ export async function updateOrderStatus({
     const order = await orderByUserId(userId, orderId);
 
     if (!order) {
+        logger().warn("Order Not Found", { userId, orderId });
+
         return errorResponse("order not found", STATUS_CODES.NOT_FOUND);
     }
 
     if (!canTransition(order.status as OrderStatus, status as OrderStatus)) {
+        logger().warn("Invalid status transition", {
+            userId,
+            orderId,
+            from: order.status,
+            to: status,
+        });
+
         return errorResponse(
             `cannot change order from ${order.status} to ${status}`,
             STATUS_CODES.UNPROCESSABLE_ENTITY
@@ -40,6 +50,8 @@ export async function updateOrderStatus({
     }
 
     await updateOrderStatusByUserId(userId, orderId, status);
+
+    logger().info("Order Status Updated", { userId, orderId, from: order.status, to: status });
 
     return successResponse({}, STATUS_CODES.NO_CONTENT);
 }
