@@ -15,20 +15,20 @@ export async function authenticate({ email, password }: AuthenticateUserInput) {
     const user = await getUserByEmail(email);
 
     if (!user) {
-        return errorResponse('Invalid Credentials', STATUS_CODES.UNAUTHORIZED);
+        return errorResponse("Invalid Credentials", STATUS_CODES.UNAUTHORIZED);
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-        return errorResponse('Invalid Credentials', STATUS_CODES.UNAUTHORIZED);
+        return errorResponse("Invalid Credentials", STATUS_CODES.UNAUTHORIZED);
     }
 
     await removeAllUserSessions(user.id);
     const token = await createSession(user.id);
 
     return successResponse({ ...user, password: undefined, token }, STATUS_CODES.OK);
-};
+}
 
 export async function register({ name, email, password }: RegisterUserInput) {
     const { existsUserWithEmail, createUser } = userRepository();
@@ -37,7 +37,7 @@ export async function register({ name, email, password }: RegisterUserInput) {
     const exists = await existsUserWithEmail(email);
 
     if (exists) {
-        return errorResponse('email is already being used', STATUS_CODES.UNPROCESSABLE_ENTITY);
+        return errorResponse("email is already being used", STATUS_CODES.UNPROCESSABLE_ENTITY);
     }
 
     const user = await createUser({ name, email, password });

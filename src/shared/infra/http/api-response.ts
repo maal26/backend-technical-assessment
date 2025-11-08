@@ -1,25 +1,25 @@
-import type { ErrorStatusCode, SuccessStatusCode } from './status-code.ts';
+import type { ErrorStatusCode, SuccessStatusCode } from "./status-code.ts";
 
 type ErrorResult<Code extends ErrorStatusCode> = [
     {
         code: Code;
         message: string;
     },
-    null
+    null,
 ];
 
-type SuccessResult<
-    T extends Record<string, unknown> | boolean | unknown[],
-    Code extends SuccessStatusCode
-> = [
-        null,
-        {
-            code: Code;
-            data: T;
-        }
-    ];
+type SuccessResult<T extends Record<string, unknown> | boolean | unknown[], Code extends SuccessStatusCode> = [
+    null,
+    {
+        code: Code;
+        data: T;
+    },
+];
 
-export const successResponse = <T extends Record<string, unknown> | boolean | unknown[], Code extends SuccessStatusCode>(
+export const successResponse = <
+    T extends Record<string, unknown> | boolean | unknown[],
+    Code extends SuccessStatusCode,
+>(
     data: T,
     code: Code
 ): SuccessResult<T, Code> => {

@@ -1,20 +1,20 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1762475888843,
-      "tag": "20251107003808_slim_earthquake",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1762476056719,
-      "tag": "20251107004056_lucky_yellowjacket",
-      "breakpoints": true
-    }
-  ]
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1762475888843,
+            "tag": "20251107003808_slim_earthquake",
+            "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1762476056719,
+            "tag": "20251107004056_lucky_yellowjacket",
+            "breakpoints": true
+        }
+    ]
 }

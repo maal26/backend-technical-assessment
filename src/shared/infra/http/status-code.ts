@@ -95,19 +95,13 @@ export const STATUS_CODES = {
     NOT_EXTENDED: 510,
 
     /** The client needs to authenticate to gain network access. */
-    NETWORK_AUTHENTICATION_REQUIRED: 511
+    NETWORK_AUTHENTICATION_REQUIRED: 511,
 } as const satisfies Record<string, number>;
 
 type StatusCodes = typeof STATUS_CODES;
 
 export type StatusCode = StatusCodes[keyof StatusCodes];
 
-export type SuccessStatusCode = Extract<
-    StatusCode,
-    200 | 201 | 202 | 203 | 204 | 205 | 206
->;
+export type SuccessStatusCode = Extract<StatusCode, 200 | 201 | 202 | 203 | 204 | 205 | 206>;
 
-export type ErrorStatusCode = Extract<
-    StatusCode,
-    400 | 401 | 403 | 404 | 405 | 409 | 422 | 500 | 501 | 503 | 504
->;
+export type ErrorStatusCode = Extract<StatusCode, 400 | 401 | 403 | 404 | 405 | 409 | 422 | 500 | 501 | 503 | 504>;

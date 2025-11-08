@@ -60,11 +60,11 @@ Build a RESTful API for an **Order Management System**.
 
 - Source code in a git repository
 - README with:
-  - Setup instructions
-  - API endpoint documentation
-  - Environment variables needed
-  - How to run tests (if included)
-  - Any architectural decisions or trade-offs made
+    - Setup instructions
+    - API endpoint documentation
+    - Environment variables needed
+    - How to run tests (if included)
+    - Any architectural decisions or trade-offs made
 - Example requests/responses (e.g. Postman collection or curl commands)
 
 ---
@@ -75,10 +75,10 @@ Build a RESTful API for an **Order Management System**.
 
 - Git repository URL (GitHub, GitLab, etc.)
 - Ensure README includes:
-  - Setup instructions
-  - How to run the application
-  - API endpoint documentation
-  - Any architectural decisions or trade-offs made
+    - Setup instructions
+    - How to run the application
+    - API endpoint documentation
+    - Any architectural decisions or trade-offs made
 
 ---
 
