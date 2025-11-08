@@ -2,8 +2,10 @@
   "name": "backend-technical-assessment",
   "version": "1.0.0",
   "description": "This technical assessment is designed to evaluate your backend engineering skills using Node.js and TypeScript.",
-  "main": "index.js",
+  "main": "src/main.ts",
+  "type": "module",
   "scripts": {
+    "dev": "tsx watch src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +18,21 @@
   "bugs": {
     "url": "https://github.com/VerifiedInc/backend-technical-assessment/issues"
   },
-  "homepage": "https://github.com/VerifiedInc/backend-technical-assessment#readme"
+  "homepage": "https://github.com/VerifiedInc/backend-technical-assessment#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/pg": "^8.15.6",
+    "drizzle-kit": "^0.31.6",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
 }
