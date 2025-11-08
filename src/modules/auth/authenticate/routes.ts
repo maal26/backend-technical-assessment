@@ -4,7 +4,6 @@ import { authenticateUserRequestSchema, registerUserRequestSchema } from "./sche
 import { STATUS_CODES } from "@/shared/infra/http/status-code.ts";
 import { authenticate, register } from "./use-cases.ts";
 import { z } from "zod";
-import { verifyToken } from "../middleware/verify-token.ts";
 
 const authRoutes = Router();
 

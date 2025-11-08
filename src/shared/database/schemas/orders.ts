@@ -1,6 +1,15 @@
 import { pgTable, integer, varchar, timestamp, check } from "drizzle-orm/pg-core";
-import { relations, sql } from "drizzle-orm";
+import { relations, sql, type InferSelectModel } from "drizzle-orm";
 import { users } from "./users.ts";
+
+export const OrderStatus = {
+    Pending: "pending",
+    Processing: "processing",
+    Completed: "completed",
+    Cancelled: "cancelled",
+} as const;
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export const orders = pgTable(
     "orders",
@@ -35,6 +44,10 @@ export const orderItems = pgTable(
         check("order_items_price_non_negative", sql`${table.price} >= 0`),
     ]
 );
+
+export type Order = InferSelectModel<typeof orders>;
+
+export type OrderItem = InferSelectModel<typeof orderItems>;
 
 export const orderRelations = relations(orders, ({ many }) => ({
     items: many(orderItems),
