@@ -7,6 +7,18 @@ import { db } from "../index.ts";
 import { and, eq, sql } from "drizzle-orm";
 
 export const orderRepository = () => {
+    const orderByUserId = async (userId: User["id"], orderId: Order["id"]) => {
+        const [order] = await db
+            .select({
+                id: orders.id,
+                status: orders.status,
+            })
+            .from(orders)
+            .where(and(eq(orders.customerId, userId), eq(orders.id, orderId)));
+
+        return order;
+    };
+
     const orderWithItemsByUserId = async (userId: User["id"], orderId: Order["id"]) => {
         return await db.query.orders.findFirst({
             where: (orders, { eq }) => and(eq(orders.customerId, userId), eq(orders.id, orderId)),
@@ -55,13 +67,25 @@ export const orderRepository = () => {
                 and(eq(orders.customerId, userId), eq(orders.id, orderId), eq(orders.status, OrderStatus["Pending"]))
             );
 
-        return result.rowCount
+        return result.rowCount;
+    };
+
+    const updateOrderStatusByUserId = async (userId: User["id"], orderId: Order["id"], status: string) => {
+        await db
+            .update(orders)
+            .set({
+                status,
+                updatedAt: sql`NOW()`,
+            })
+            .where(and(eq(orders.customerId, userId), eq(orders.id, orderId)));
     };
 
     return {
+        orderByUserId,
         createOrder,
         orderWithItemsByUserId,
         ordersWithItemsByUserId,
         cancelOrderById,
+        updateOrderStatusByUserId,
     };
 };

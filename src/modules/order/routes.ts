@@ -9,6 +9,8 @@ import { getOrders } from "./get-orders/use-cases.ts";
 import { getOrdersRequestSchema } from "./get-orders/schemas.ts";
 import { getOrder } from "./get-order/use-cases.ts";
 import { deleteOrder } from "./delete-order/use-cases.ts";
+import { updateOrderStatusSchema } from "./update-order/schemas.ts";
+import { updateOrderStatus } from "./update-order/use-cases.ts";
 
 const orderRoutes = Router();
 
@@ -56,6 +58,31 @@ orderRoutes.post("/", verifyToken, async (request: Request, response: Response) 
 
     if (error) {
         return response.status(error.code).json({ message: error.message });
+    }
+
+    return response.status(success.code).json(success.data);
+});
+
+orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response) => {
+    const parsed = updateOrderStatusSchema.safeParse(request.body);
+
+    if (!parsed.success) {
+        return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+            message: "Validation Errors",
+            ...z.treeifyError(parsed.error),
+        });
+    }
+
+    const [error, success] = await updateOrderStatus({
+        userId: request.userId as number,
+        orderId: parseInt(request.params.id),
+        status: parsed.data.status,
+    });
+
+    if (error) {
+        return response.status(error.code).json({
+            message: error.message,
+        });
     }
 
     return response.status(success.code).json(success.data);
