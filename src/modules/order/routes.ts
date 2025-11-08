@@ -8,6 +8,7 @@ import { createOrder } from "./create-orders/use-cases.ts";
 import { getOrders } from "./get-orders/use-cases.ts";
 import { getOrdersRequestSchema } from "./get-orders/schemas.ts";
 import { getOrder } from "./get-order/use-cases.ts";
+import { deleteOrder } from "./delete-order/use-cases.ts";
 
 const orderRoutes = Router();
 
@@ -55,6 +56,21 @@ orderRoutes.post("/", verifyToken, async (request: Request, response: Response) 
 
     if (error) {
         return response.status(error.code).json({ message: error.message });
+    }
+
+    return response.status(success.code).json(success.data);
+});
+
+orderRoutes.delete("/:id", verifyToken, async (request: Request, response: Response) => {
+    const [error, success] = await deleteOrder({
+        userId: request.userId as number,
+        orderId: parseInt(request.params.id),
+    });
+
+    if (error) {
+        return response.status(error.code).json({
+            message: error.message,
+        });
     }
 
     return response.status(success.code).json(success.data);

@@ -5,9 +5,9 @@ import { errorResponse, successResponse } from "@/shared/infra/http/api-response
 import { STATUS_CODES } from "@/shared/infra/http/status-code.ts";
 
 export async function getOrder({ userId, orderId }: { userId: User["id"]; orderId: Order["id"] }) {
-    const { orderByUserId } = orderRepository();
+    const { orderWithItemsByUserId } = orderRepository();
 
-    const order = await orderByUserId(userId, orderId);
+    const order = await orderWithItemsByUserId(userId, orderId);
 
     if (!order) {
         return errorResponse("order not found", STATUS_CODES.NOT_FOUND);

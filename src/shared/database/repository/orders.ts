@@ -1,13 +1,13 @@
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { type User } from "../schemas/users.ts";
-import type { Order, OrderItem, OrderStatus } from "../schemas/orders.ts";
+import { OrderStatus, type Order, type OrderItem } from "../schemas/orders.ts";
 import { orders, orderItems } from "../schemas/orders.ts";
 import type * as schema from "../schemas/index.ts";
 import { db } from "../index.ts";
-import { and } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export const orderRepository = () => {
-    const orderByUserId = async (userId: User["id"], orderId: Order["id"]) => {
+    const orderWithItemsByUserId = async (userId: User["id"], orderId: Order["id"]) => {
         return await db.query.orders.findFirst({
             where: (orders, { eq }) => and(eq(orders.customerId, userId), eq(orders.id, orderId)),
             with: {
@@ -16,7 +16,7 @@ export const orderRepository = () => {
         });
     };
 
-    const ordersByUserId = async (userId: User["id"], status?: string) => {
+    const ordersWithItemsByUserId = async (userId: User["id"], status?: string) => {
         return await db.query.orders.findMany({
             where: (orders, { eq }) =>
                 and(eq(orders.customerId, userId), status ? eq(orders.status, status) : undefined),
@@ -44,9 +44,24 @@ export const orderRepository = () => {
         };
     };
 
+    const cancelOrderById = async (userId: User["id"], orderId: Order["id"]) => {
+        const result = await db
+            .update(orders)
+            .set({
+                status: OrderStatus["Cancelled"],
+                updatedAt: sql`NOW()`,
+            })
+            .where(
+                and(eq(orders.customerId, userId), eq(orders.id, orderId), eq(orders.status, OrderStatus["Pending"]))
+            );
+
+        return result.rowCount
+    };
+
     return {
         createOrder,
-        orderByUserId,
-        ordersByUserId,
+        orderWithItemsByUserId,
+        ordersWithItemsByUserId,
+        cancelOrderById,
     };
 };

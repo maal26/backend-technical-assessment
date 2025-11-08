@@ -5,9 +5,9 @@ import { STATUS_CODES } from "@/shared/infra/http/status-code.ts";
 import type { GetOrdersInput } from "./schemas.ts";
 
 export async function getOrders({ status, userId }: GetOrdersInput & { userId: User["id"] }) {
-    const { ordersByUserId } = orderRepository();
+    const { ordersWithItemsByUserId } = orderRepository();
 
-    const orders = await ordersByUserId(userId, status);
+    const orders = await ordersWithItemsByUserId(userId, status);
 
     return successResponse(orders, STATUS_CODES.OK);
 }
