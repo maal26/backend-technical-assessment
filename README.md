@@ -71,8 +71,6 @@ For more information about the principles behind this design, see:
 
 ## Design Decisions
 
-## Design Decisions
-
 - **Type Safety:** TypeScript strict mode ensures safer, predictable code.  
 - **Validation:** Zod is used for input and schema validation, ensuring all data entering the system is explicitly validated.  
 - **Persistence:** Drizzle ORM provides a lightweight, type-safe integration with PostgreSQL.  
