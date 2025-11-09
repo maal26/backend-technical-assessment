@@ -1,100 +1,72 @@
-# Senior Backend Engineer Technical Assessment
+## Technologies
 
-## Overview
+- Node.js + TypeScript  
+- Express.js  
+- Drizzle ORM with PostgreSQL  
+- Zod for schema validation  
+- Pino for logging  
+- Supertest for integration testing  
+- Docker for PostgreSQL setup  
 
-This technical assessment is designed to evaluate your backend engineering skills using Node.js and TypeScript.
+## Setup Instructions
 
----
+1. Clone the repository  
+   ```bash
+   git clone git@github.com:maal26/backend-technical-assessment.git
+   cd backend-technical-assessment
+   ```
 
-## Objective
+2. Install dependencies  
+   ```bash
+   npm install
+   ```
 
-Build a RESTful API for an **Order Management System**.
+3. Copy the environment example file  
+   ```bash
+   cp .env.example .env
+   ```
 
----
+4. Start the PostgreSQL container  
+   ```bash
+   docker compose up -d --build
+   ```
 
-## Requirements
+5. Run database migrations  
+   ```bash
+   npx drizzle-kit push
+   ```
 
-### Core Functionality
+6. Start the development server  
+   ```bash
+   npm run dev
+   ```
 
-#### **Order Management Operations**
+The API will be available at `http://localhost:3000`.
 
-- POST `/orders` - Create a new order
-- GET `/orders` - List all orders (with optional filtering by status)
-- GET `/orders/:id` - Get order by ID
-- PUT `/orders/:id` - Update order status
-- DELETE `/orders/:id` - Cancel order (only if status is 'pending')
+## Testing
 
-#### **Order Model**
+Tests use Node’s built-in test runner and Supertest.   A dedicated PostgreSQL instance is used to ensure isolation during test runs.
 
-- Each order should have: `id`, `customerId`, `items` (array of products with name, quantity, price), `totalAmount`, `status` (pending/processing/completed/cancelled), `createdAt`, `updatedAt`
+Before running the tests, create a `.env.testing` file based on `.env.example` and configure it to point to the test database.
 
-#### **Business Logic**
+Once configured, run:
 
-- Calculate `totalAmount` automatically from items
-- Validate status transitions (e.g., can't go from 'completed' to 'pending')
-- Only 'pending' orders can be cancelled
+```bash
+npm run test
+```
 
-### Technical Requirements
+## API Documentation
 
-- **TypeScript** with strict mode enabled
-- **Express.js** framework
-- **Data persistence** (in-memory is acceptable, but bonus for database integration)
-- **Input validation** (validate order data, item quantities, prices, etc.)
-- **Error handling** (consistent error responses, proper HTTP status codes)
-- **Status transition validation**
+A Postman collection is included with the project and can be imported to view and test all endpoints.
 
-### Bonus Points
+## Architecture
 
-- Unit tests for key functionality
-- Request rate limiting
-- API documentation (Swagger/OpenAPI)
-- Database integration (PostgreSQL, MongoDB, etc.)
-- Docker containerization
-- Logging middleware
-- Request/Response validation with Zod or similar
-- Authentication (e.g., JWT-based)
+The project follows a modular, feature-based structure.   Each module encapsulates its own logic, while shared configurations and services are organized under a common layer.   Validation is handled through Zod, database operations through Drizzle ORM, and logging through Pino.
 
----
+## Design Decisions
 
-## Deliverables
-
-- Source code in a git repository
-- README with:
-    - Setup instructions
-    - API endpoint documentation
-    - Environment variables needed
-    - How to run tests (if included)
-    - Any architectural decisions or trade-offs made
-- Example requests/responses (e.g. Postman collection or curl commands)
-
----
-
-## Submission Guidelines
-
-**Submit before the scheduled interview:**
-
-- Git repository URL (GitHub, GitLab, etc.)
-- Ensure README includes:
-    - Setup instructions
-    - How to run the application
-    - API endpoint documentation
-    - Any architectural decisions or trade-offs made
-
----
-
-## Tips for Success
-
-- **Write production-quality code** - treat this as real production code
-- **Document your decisions** - explain architectural choices in your README
-- **Validate all inputs** - ensure data integrity and proper error handling
-- **Think scalability** - consider how the system would handle growth
-- **Test your code** - ensure everything works before submitting
-- **Don't over-engineer** - focus on the requirements, but show good judgment
-
----
-
-## Questions?
-
-If you have any questions about the requirements, timeline, or format, please feel free to contact us.
-
-Good luck! 🚀
+- **Type Safety:** TypeScript strict mode ensures safer, predictable code.  
+- **Validation:** Zod is used for input and schema validation.  
+- **Persistence:** Drizzle ORM provides a lightweight, type-safe integration with PostgreSQL.  
+- **Logging:** Pino is used for structured, performant logging.  
+- **Isolation:** Tests run against a dedicated PostgreSQL instance managed via Docker.  
