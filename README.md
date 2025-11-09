@@ -48,6 +48,7 @@ The API will be available at `http://localhost:3000`.
 Tests use Node’s built-in test runner and Supertest.   A dedicated PostgreSQL instance is used to ensure isolation during test runs.
 
 Before running the tests, create a `.env.testing` file based on `.env.example` and configure it to point to the test database.
+In this file, make sure the database connection points to the test database running on port `5433`.
 
 Once configured, run:
 
@@ -61,12 +62,21 @@ A Postman collection is included with the project and can be imported to view an
 
 ## Architecture
 
-The project follows a modular, feature-based structure.   Each module encapsulates its own logic, while shared configurations and services are organized under a common layer.   Validation is handled through Zod, database operations through Drizzle ORM, and logging through Pino.
+The project follows a modular, feature-based structure where each domain (e.g., orders, authentication) is self-contained and independent.  
+This approach improves scalability, testability, and overall clarity of the codebase.
+
+For more information about the principles behind this design, see:  
+- https://phauer.com/2020/package-by-feature/  
+- https://github.com/sivaprasadreddy/tomato-architecture
+
+## Design Decisions
 
 ## Design Decisions
 
 - **Type Safety:** TypeScript strict mode ensures safer, predictable code.  
-- **Validation:** Zod is used for input and schema validation.  
+- **Validation:** Zod is used for input and schema validation, ensuring all data entering the system is explicitly validated.  
 - **Persistence:** Drizzle ORM provides a lightweight, type-safe integration with PostgreSQL.  
 - **Logging:** Pino is used for structured, performant logging.  
-- **Isolation:** Tests run against a dedicated PostgreSQL instance managed via Docker.  
+- **Rate Limiting:** Requests are limited globally using `express-rate-limit` to prevent abuse and excessive traffic.  
+- **Authentication:** The system uses an opaque session token instead of JWTs. This approach simplifies invalidation since sessions can be easily revoked or deleted in the database without needing token blacklists or expiry synchronization. It also reduces exposure of user data, as the token itself contains no information. It serves purely as a unique reference to a session record.  
+- **Testing Isolation:** Tests run against a dedicated PostgreSQL instance managed via Docker, ensuring no interference with development data.
