@@ -30,7 +30,7 @@ export const userRepository = () => {
     };
 
     const createUser = async ({ email, password, name }: Pick<User, "email" | "password" | "name">) => {
-        const hash = bcrypt.hashSync(password, parseInt(envs.PASSWORD_SALT_ROUNDS));
+        const hash = await bcrypt.hash(password, parseInt(envs.PASSWORD_SALT_ROUNDS));
 
         const result = await db
             .insert(users)
