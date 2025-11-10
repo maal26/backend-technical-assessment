@@ -57,7 +57,7 @@ orderRoutes.get("/:id", verifyToken, async (request: Request, response: Response
 
         const [error, success] = await getOrder({
             userId: request.userId as number,
-            orderId: parsed.data.id,
+            orderId: parsedParams.data.id,
         });
 
         if (error) {
@@ -129,7 +129,7 @@ orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response
 
         const [error, success] = await updateOrderStatus({
             userId: request.userId as number,
-            orderId: parseInt(request.params.id),
+            orderId: parsedParams.data.id,
             status: parsed.data.status,
         });
 
@@ -164,7 +164,7 @@ orderRoutes.delete("/:id", verifyToken, async (request: Request, response: Respo
 
         const [error, success] = await deleteOrder({
             userId: request.userId as number,
-            orderId: parseInt(request.params.id),
+            orderId: parsedParams.data.id,
         });
 
         if (error) {
