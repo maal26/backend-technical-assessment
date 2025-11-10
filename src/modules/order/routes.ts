@@ -15,6 +15,10 @@ import { logger } from "@/shared/config/logger.ts";
 
 const orderRoutes = Router();
 
+export const idParamSchema = z.object({
+    id: z.coerce.number().int(),
+});
+
 orderRoutes.get("/", verifyToken, async (request: Request, response: Response) => {
     try {
         const parsed = getOrdersRequestSchema.safeParse(request.query);
@@ -42,9 +46,18 @@ orderRoutes.get("/", verifyToken, async (request: Request, response: Response) =
 
 orderRoutes.get("/:id", verifyToken, async (request: Request, response: Response) => {
     try {
+        const parsedParams = idParamSchema.safeParse(request.params);
+
+        if (!parsedParams.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsedParams.error),
+            });
+        }
+
         const [error, success] = await getOrder({
             userId: request.userId as number,
-            orderId: parseInt(request.params.id),
+            orderId: parsed.data.id,
         });
 
         if (error) {
@@ -96,6 +109,15 @@ orderRoutes.post("/", verifyToken, async (request: Request, response: Response) 
 
 orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response) => {
     try {
+        const parsedParams = idParamSchema.safeParse(request.params);
+
+        if (!parsedParams.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsedParams.error),
+            });
+        }
+
         const parsed = updateOrderStatusSchema.safeParse(request.body);
 
         if (!parsed.success) {
@@ -131,6 +153,15 @@ orderRoutes.put("/:id", verifyToken, async (request: Request, response: Response
 
 orderRoutes.delete("/:id", verifyToken, async (request: Request, response: Response) => {
     try {
+        const parsedParams = idParamSchema.safeParse(request.params);
+
+        if (!parsedParams.success) {
+            return response.status(STATUS_CODES.UNPROCESSABLE_ENTITY).json({
+                message: "Validation Errors",
+                ...z.treeifyError(parsedParams.error),
+            });
+        }
+
         const [error, success] = await deleteOrder({
             userId: request.userId as number,
             orderId: parseInt(request.params.id),
