@@ -217,7 +217,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/orders/6",
+							"raw": "{{baseURL}}/orders/1",
 							"host": [
 								"{{baseURL}}"
 							],
@@ -294,7 +294,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/orders",
+							"raw": "{{baseURL}}/orders/1",
 							"host": [
 								"{{baseURL}}"
 							],
