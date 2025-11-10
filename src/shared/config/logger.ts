@@ -4,13 +4,13 @@ import { envs } from "./envs.ts";
 const pinoLogger = pino(
     envs.NODE_ENV === "dev"
         ? {
-            transport: {
-                target: "pino-pretty",
-                options: {
-                    colorize: true,
-                },
-            },
-        }
+              transport: {
+                  target: "pino-pretty",
+                  options: {
+                      colorize: true,
+                  },
+              },
+          }
         : {}
 );
 
@@ -27,6 +27,6 @@ export const logger = () => {
         info,
         warn,
         error,
-        instance
+        instance,
     };
 };
