@@ -17,6 +17,7 @@ export async function authenticate({ email, password }: AuthenticateUserInput) {
     const user = await getUserByEmail(email);
 
     if (!user) {
+        // compute dummy hash to mitigate timing attacks
         await bcrypt.compare(password, DUMMY_HASH);
 
         return errorResponse("Invalid Credentials", STATUS_CODES.UNAUTHORIZED);
